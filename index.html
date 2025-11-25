@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Meal Finder</title>
+  <link rel="stylesheet" href="./style.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <div class="brand" id="logo" role="button" tabindex="0" aria-label="Go to homepage">
+        <span class="home-icon">&#127869</span>
+        <span class="brand-text">MEAL FINDER</span>
+      </div>
+
+      <button id="hamburger" class="hamburger" aria-label="Open categories">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Sidebar categories (hidden by default) -->
+  <aside id="sideCategories" class="side-categories" aria-hidden="true">
+    <button id="closeSide" class="close-btn" aria-label="Close categories">✕</button>
+    <nav id="sideList" class="side-list" aria-label="Categories list">
+      <!-- categories will be injected here -->
+    </nav>
+  </aside>
+
+  <main id="app">
+    <!-- HERO -->
+    <section class="hero">
+      <div class="hero-overlay">
+        <div class="hero-inner container">
+          <div class="search-row">
+            <div class="search-pill" role="search">
+              <input id="searchInput" type="search" placeholder="Search recipes here ..." aria-label="Search recipes">
+            </div>
+            <button id="searchBtn" class="search-btn" aria-label="Search">🔍</button>
+          </div>
+
+          <h1 class="hero-title">What are your favorite cuisines?</h1>
+          <p class="hero-sub">PERSONALIZE YOUR EXPERIENCE</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- MAIN VIEWS -->
+    <section id="homeSection" class="section container">
+      <h2 class="section-title">CATEGORIES</h2>
+      <div id="categoriesGrid" class="categories-grid">
+        <!-- category cards injected here -->
+      </div>
+    </section>
+
+    <section id="resultsSection" class="section container hidden">
+      <h2 class="section-title">MEALS</h2>
+      <div id="resultsGrid" class="results-grid"></div>
+    </section>
+
+    <section id="categorySection" class="section container hidden">
+      <div id="categoryInfo" class="category-info card hidden">
+        <h3 id="categoryName">Category Name</h3>
+        <p id="categoryDescription">Category description will appear here.</p>
+      </div>
+
+      <h4 id="categoryMealsTitle" class="meals-title hidden">MEALS</h4>
+      <div id="mealsGrid" class="meals-grid"></div>
+    </section>
+
+    <section id="mealSection" class="section container hidden">
+      <div id="breadcrumb" class="breadcrumb"></div>
+      <div class="meal-details">
+        <div class="meal-left">
+          <img id="mealImage" alt="Meal image" src="" />
+        </div>
+        <div class="meal-right">
+          <h2 id="mealTitle">Meal Title</h2>
+          <div class="meta-row">
+            <div><strong>Category:</strong> <span id="mealCategory"></span></div>
+            <div><strong>Source:</strong> <a id="mealSource" href="#" target="_blank" rel="noopener noreferrer">Link</a></div>
+            <div><strong>Tags:</strong> <span id="mealTags"></span></div>
+          </div>
+
+          <div id="ingredientsBox" class="ingredients-box">
+            <h4>Ingredients</h4>
+            <div id="ingredientsList" class="ingredients-list"></div>
+          </div>
+
+          <div id="measuresBox" class="card measures-box"></div>
+
+          <div id="instructionsBox" class="card instructions-box"></div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="container footer">© Meal Finder</footer>
+  </main>
+
+  <script src="./script.js"></script>
+</body>
+</html>
