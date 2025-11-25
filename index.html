@@ -1,11 +1,13 @@
 <!doctype html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Meal Finder</title>
   <link rel="stylesheet" href="./style.css" />
 </head>
+
 <body>
   <header class="site-header">
     <div class="container header-inner">
@@ -79,7 +81,8 @@
           <h2 id="mealTitle">Meal Title</h2>
           <div class="meta-row">
             <div><strong>Category:</strong> <span id="mealCategory"></span></div>
-            <div><strong>Source:</strong> <a id="mealSource" href="#" target="_blank" rel="noopener noreferrer">Link</a></div>
+            <div><strong>Source:</strong> <a id="mealSource" href="#" target="_blank" rel="noopener noreferrer">Link</a>
+            </div>
             <div><strong>Tags:</strong> <span id="mealTags"></span></div>
           </div>
 
@@ -96,8 +99,14 @@
     </section>
 
     <footer class="container footer">© Meal Finder</footer>
+
+    <!-- ALL CATEGORIES UNDER MEAL DETAIL -->
+    <h2 class="section-title" style="margin-top:40px;">More Categories</h2>
+    <div id="moreCategoriesGrid" class="categories-grid"></div>
+
   </main>
 
   <script src="./script.js"></script>
 </body>
+
 </html>
