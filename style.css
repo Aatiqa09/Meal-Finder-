@@ -11,7 +11,7 @@
 *{box-sizing:border-box}
 body{
   margin:0;
-  font-family: "Helvetica Neue", Arial, sans-serif;
+  font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif ;
   color:var(--text);
   background:#ffffff;
   -webkit-font-smoothing:antialiased;
