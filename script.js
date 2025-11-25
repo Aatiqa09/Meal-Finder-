@@ -50,44 +50,74 @@ let categoriesData = []; // store categories list (from categories.php)
 
 /* ---------- Utility / Fallback sample data ---------- */
 const sampleCategories = [
-  { idCategory: '1', strCategory: 'Beef', strCategoryThumb:'', strCategoryDescription: 'Beef dishes.' },
-  { idCategory: '2', strCategory: 'Chicken', strCategoryThumb:'', strCategoryDescription: 'Chicken dishes.'},
-  { idCategory: '3', strCategory: 'Vegetarian', strCategoryThumb:'', strCategoryDescription: 'Veg recipes.'}
+  { idCategory: '1', strCategory: 'Beef', strCategoryThumb: '', strCategoryDescription: 'Beef dishes.' },
+  { idCategory: '2', strCategory: 'Chicken', strCategoryThumb: '', strCategoryDescription: 'Chicken dishes.' },
+  { idCategory: '3', strCategory: 'Vegetarian', strCategoryThumb: '', strCategoryDescription: 'Veg recipes.' }
 ];
 
-function el(tag, cls = ''){ const e = document.createElement(tag); if(cls) e.className = cls; return e; }
-function clear(node){ node.innerHTML = ''; }
+function el(tag, cls = '') { const e = document.createElement(tag); if (cls) e.className = cls; return e; }
+function clear(node) { node.innerHTML = ''; }
 
 /* ---------- Render helpers ---------- */
-function renderCategoriesGrid(list){
+function renderCategoriesGrid(list) {
   clear(categoriesGrid);
   list.forEach(cat => {
-    const card = el('div','category-card');
+    const card = el('div', 'category-card');
     card.tabIndex = 0;
     card.setAttribute('data-cat', cat.strCategory);
     const img = el('img');
     img.alt = cat.strCategory;
     img.src = cat.strCategoryThumb || '';
     card.appendChild(img);
-    const badge = el('div','category-badge');
+    const badge = el('div', 'category-badge');
     badge.textContent = cat.strCategory;
     card.appendChild(badge);
 
-    card.addEventListener('click', ()=> {
+    card.addEventListener('click', () => {
       navigateToCategory(cat.strCategory);
     });
-    card.addEventListener('keypress', (e)=> { if(e.key==='Enter') navigateToCategory(cat.strCategory);});
+    card.addEventListener('keypress', (e) => { if (e.key === 'Enter') navigateToCategory(cat.strCategory); });
     categoriesGrid.appendChild(card);
   });
 }
 
-function renderSidebar(list){
+/* ----------- Render Categories Under Meal Page ----------- */
+function renderMoreCategories(list) {
+  const grid = document.getElementById("moreCategoriesGrid");
+  if (!grid) return;
+
+  grid.innerHTML = "";
+
+  list.forEach(cat => {
+    const card = el("div", "category-card");
+    card.setAttribute("data-cat", cat.strCategory);
+
+    const img = el("img");
+    img.src = cat.strCategoryThumb || "";
+    img.alt = cat.strCategory;
+
+    const badge = el("div", "category-badge");
+    badge.textContent = cat.strCategory;
+
+    card.appendChild(img);
+    card.appendChild(badge);
+
+    card.addEventListener("click", () => {
+      navigateToCategory(cat.strCategory);
+    });
+
+    grid.appendChild(card);
+  });
+}
+
+
+function renderSidebar(list) {
   clear(sideList);
   list.forEach(cat => {
     const a = el('a');
     a.textContent = cat.strCategory;
     a.href = `#/category/${encodeURIComponent(cat.strCategory)}`;
-    a.addEventListener('click', (ev)=>{
+    a.addEventListener('click', (ev) => {
       ev.preventDefault();
       closeSidebar();
       navigateToCategory(cat.strCategory);
@@ -96,55 +126,55 @@ function renderSidebar(list){
   });
 }
 
-function renderResults(meals){
+function renderResults(meals) {
   clear(resultsGrid);
-  if(!meals || meals.length===0){
+  if (!meals || meals.length === 0) {
     resultsGrid.innerHTML = '<p>No results found.</p>';
     return;
   }
-  meals.forEach(m=>{
-    const card = el('div','meal-card');
+  meals.forEach(m => {
+    const card = el('div', 'meal-card');
     card.setAttribute('data-id', m.idMeal);
     const img = el('img'); img.src = m.strMealThumb || ''; img.alt = m.strMeal;
     card.appendChild(img);
-    const cap = el('div','meal-caption');
+    const cap = el('div', 'meal-caption');
     cap.innerHTML = `<div style="opacity:.6;font-size:13px">${m.strArea || m.strCategory || ''}</div><div style="font-weight:700">${m.strMeal}</div>`;
     card.appendChild(cap);
-    card.addEventListener('click', ()=> navigateToMeal(m.idMeal));
+    card.addEventListener('click', () => navigateToMeal(m.idMeal));
     resultsGrid.appendChild(card);
   });
 }
 
-function renderMealsGrid(list){
+function renderMealsGrid(list) {
   clear(mealsGrid);
-  if(!list || list.length===0){
+  if (!list || list.length === 0) {
     mealsGrid.innerHTML = '<p>No meals found for this category.</p>';
     return;
   }
-  list.forEach(m=>{
-    const card = el('div','meal-card');
+  list.forEach(m => {
+    const card = el('div', 'meal-card');
     const img = el('img'); img.src = m.strMealThumb || m.strMealThumb; img.alt = m.strMeal;
     card.appendChild(img);
-    const cap = el('div','meal-caption');
+    const cap = el('div', 'meal-caption');
     cap.innerHTML = `<div style="opacity:.6;font-size:13px">${m.strArea || ''}</div><div style="font-weight:700">${m.strMeal}</div>`;
     card.appendChild(cap);
-    card.addEventListener('click', ()=> navigateToMeal(m.idMeal));
+    card.addEventListener('click', () => navigateToMeal(m.idMeal));
     mealsGrid.appendChild(card);
   });
 }
 
 /* ---------- Sidebar actions ---------- */
-function openSidebar(){
+function openSidebar() {
   sideCategories.classList.add('open');
-  sideCategories.setAttribute('aria-hidden','false');
+  sideCategories.setAttribute('aria-hidden', 'false');
 }
-function closeSidebar(){
+function closeSidebar() {
   sideCategories.classList.remove('open');
-  sideCategories.setAttribute('aria-hidden','true');
+  sideCategories.setAttribute('aria-hidden', 'true');
 }
 
 /* ---------- Navigation / Views ---------- */
-function showHome(){
+function showHome() {
   hideAllSections();
   homeSection.classList.remove('hidden');
   resultsSection.classList.add('hidden');
@@ -153,7 +183,7 @@ function showHome(){
   window.location.hash = '#/';
 }
 
-function showSearchResults(q, meals){
+function showSearchResults(q, meals) {
   hideAllSections();
   resultsSection.classList.remove('hidden');
   homeSection.classList.add('hidden');
@@ -163,7 +193,7 @@ function showSearchResults(q, meals){
   window.location.hash = `#/search/${encodeURIComponent(q)}`;
 }
 
-function showCategoryPage(catName, description, meals){
+function showCategoryPage(catName, description, meals) {
   hideAllSections();
   categorySection.classList.remove('hidden');
   homeSection.classList.add('hidden');
@@ -179,7 +209,7 @@ function showCategoryPage(catName, description, meals){
   window.location.hash = `#/category/${encodeURIComponent(catName)}`;
 }
 
-function showMealPage(meal){
+function showMealPage(meal) {
   hideAllSections();
   mealSection.classList.remove('hidden');
   homeSection.classList.add('hidden');
@@ -187,7 +217,7 @@ function showMealPage(meal){
   categorySection.classList.add('hidden');
 
   // breadcrumb
-  breadcrumb.innerHTML = `<span>🏠</span> &nbsp;&nbsp; » &nbsp;&nbsp; ${meal.strMeal}`;
+  breadcrumb.innerHTML = `<span>&#127869</span> &nbsp;&nbsp; » &nbsp;&nbsp; ${meal.strMeal}`;
 
   mealImage.src = meal.strMealThumb || '';
   mealImage.alt = meal.strMeal;
@@ -202,28 +232,28 @@ function showMealPage(meal){
   clear(measuresBox);
   const ingredients = [];
   const measures = [];
-  for(let i=1;i<=20;i++){
+  for (let i = 1; i <= 20; i++) {
     const ing = meal[`strIngredient${i}`];
     const measure = meal[`strMeasure${i}`];
-    if(ing && ing.trim()){
+    if (ing && ing.trim()) {
       ingredients.push(ing.trim());
-      measures.push({ing:ing.trim(), measure: (measure||'').trim()});
+      measures.push({ ing: ing.trim(), measure: (measure || '').trim() });
     }
   }
   // ingredients badges
-  ingredients.forEach((ing, idx)=>{
-    const badge = el('div','ing');
-    badge.textContent = `${idx+1}. ${ing}`;
+  ingredients.forEach((ing, idx) => {
+    const badge = el('div', 'ing');
+    badge.textContent = `${idx + 1}. ${ing}`;
     ingredientsList.appendChild(badge);
   });
 
   // measures box (two columns)
   const leftCol = el('div');
   const rightCol = el('div');
-  measures.forEach((m, idx)=>{
+  measures.forEach((m, idx) => {
     const row = el('div');
     row.textContent = `🔸 ${m.measure || ''} ${m.ing}`;
-    if(idx % 2 === 0) leftCol.appendChild(row); else rightCol.appendChild(row);
+    if (idx % 2 === 0) leftCol.appendChild(row); else rightCol.appendChild(row);
   });
   measuresBox.appendChild(leftCol);
   measuresBox.appendChild(rightCol);
@@ -231,12 +261,12 @@ function showMealPage(meal){
   // instructions (split into paragraphs / bullet steps)
   clear(instructionsBox);
   const instr = (meal.strInstructions || '').trim();
-  if(instr){
+  if (instr) {
     const lines = instr.split(/\r?\n/).filter(Boolean).join(' ').split(/[.?!]\s+/).filter(Boolean);
-    lines.forEach((ln, idx)=>{
-      const step = el('div','step');
+    lines.forEach((ln, idx) => {
+      const step = el('div', 'step');
       const cb = el('div'); cb.innerHTML = '✔️';
-      const txt = el('div'); txt.innerHTML = `<div style="font-weight:700;margin-bottom:6px">Step ${idx+1}</div><div style="color:#444">${ln.trim()}</div>`;
+      const txt = el('div'); txt.innerHTML = `<div style="font-weight:700;margin-bottom:6px">Step ${idx + 1}</div><div style="color:#444">${ln.trim()}</div>`;
       step.appendChild(cb); step.appendChild(txt);
       instructionsBox.appendChild(step);
     });
@@ -245,10 +275,15 @@ function showMealPage(meal){
   }
 
   window.location.hash = `#/meal/${encodeURIComponent(meal.idMeal)}`;
+  // Load FULL category list under meal
+  renderMoreCategories(categoriesData);
+
 }
 
+
+
 /* hide everything helper */
-function hideAllSections(){
+function hideAllSections() {
   homeSection.classList.add('hidden');
   resultsSection.classList.add('hidden');
   categorySection.classList.add('hidden');
@@ -256,21 +291,21 @@ function hideAllSections(){
 }
 
 /* ---------- Network calls (with fallback) ---------- */
-async function fetchJSON(url){
+async function fetchJSON(url) {
   try {
     const res = await fetch(url);
-    if(!res.ok) throw new Error('Network response not OK');
+    if (!res.ok) throw new Error('Network response not OK');
     const data = await res.json();
     return data;
-  } catch(err){
+  } catch (err) {
     console.warn('Fetch failed for', url, err);
     return null;
   }
 }
 
-async function loadCategories(){
+async function loadCategories() {
   const data = await fetchJSON(API.categories);
-  if(data && data.categories){
+  if (data && data.categories) {
     categoriesData = data.categories;
   } else {
     categoriesData = sampleCategories;
@@ -279,8 +314,8 @@ async function loadCategories(){
   renderSidebar(categoriesData);
 }
 
-async function performSearch(q){
-  if(!q || !q.trim()) return;
+async function performSearch(q) {
+  if (!q || !q.trim()) return;
   showLoadingInResults();
   const url = API.search(q);
   const data = await fetchJSON(url);
@@ -288,7 +323,7 @@ async function performSearch(q){
   showSearchResults(q, meals);
 }
 
-async function loadCategory(catName){
+async function loadCategory(catName) {
   // find description from categoriesData
   const catObj = categoriesData.find(c => c.strCategory.toLowerCase() === catName.toLowerCase());
   const description = catObj ? catObj.strCategoryDescription : '';
@@ -298,10 +333,10 @@ async function loadCategory(catName){
   showCategoryPage(catName, description, meals);
 }
 
-async function loadMealById(id){
+async function loadMealById(id) {
   const data = await fetchJSON(API.lookupById(id));
   const meal = data && data.meals && data.meals[0] ? data.meals[0] : null;
-  if(meal) showMealPage(meal);
+  if (meal) showMealPage(meal);
   else {
     alert('Meal not found.');
     showHome();
@@ -309,46 +344,46 @@ async function loadMealById(id){
 }
 
 /* ---------- UI helpers ---------- */
-function showLoadingInResults(){
+function showLoadingInResults() {
   clear(resultsGrid);
   resultsGrid.innerHTML = '<p>Loading...</p>';
 }
 
 /* ---------- Navigation helpers ---------- */
-function navigateToCategory(catName){
+function navigateToCategory(catName) {
   // call loadCategory and update view
   loadCategory(catName);
 }
 
-function navigateToMeal(id){
+function navigateToMeal(id) {
   loadMealById(id);
 }
 
 /* ---------- Event wiring ---------- */
-hamburger.addEventListener('click', (e)=> { openSidebar(); });
-closeSide.addEventListener('click', (e)=> { closeSidebar(); });
-logo.addEventListener('click', (e)=> { showHome(); });
-logo.addEventListener('keypress', (e)=> { if(e.key === 'Enter') showHome(); });
-searchBtn.addEventListener('click', (e)=> {
+hamburger.addEventListener('click', (e) => { openSidebar(); });
+closeSide.addEventListener('click', (e) => { closeSidebar(); });
+logo.addEventListener('click', (e) => { showHome(); });
+logo.addEventListener('keypress', (e) => { if (e.key === 'Enter') showHome(); });
+searchBtn.addEventListener('click', (e) => {
   const q = searchInput.value.trim();
-  if(q) performSearch(q);
+  if (q) performSearch(q);
 });
-searchInput.addEventListener('keydown', (e)=> {
-  if(e.key === 'Enter'){
+searchInput.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') {
     const q = searchInput.value.trim();
-    if(q) performSearch(q);
+    if (q) performSearch(q);
   }
 });
 
 /* Hash routing */
-async function handleHash(){
+async function handleHash() {
   const hash = decodeURIComponent(location.hash || '#/');
-  if(hash === '#/' || hash === '' || hash === '#'){
+  if (hash === '#/' || hash === '' || hash === '#') {
     showHome();
     return;
   }
   // #/search/{q}
-  if(hash.startsWith('#/search/')){
+  if (hash.startsWith('#/search/')) {
     const q = hash.split('#/search/')[1] || '';
     searchInput.value = q;
     const data = await fetchJSON(API.search(q));
@@ -357,14 +392,14 @@ async function handleHash(){
     return;
   }
   // #/category/{name}
-  if(hash.startsWith('#/category/')){
+  if (hash.startsWith('#/category/')) {
     const cat = hash.split('#/category/')[1] || '';
     await loadCategoriesIfEmpty();
     await loadCategory(cat);
     return;
   }
   // #/meal/{id}
-  if(hash.startsWith('#/meal/')){
+  if (hash.startsWith('#/meal/')) {
     const id = hash.split('#/meal/')[1] || '';
     await loadMealById(id);
     return;
@@ -376,12 +411,12 @@ async function handleHash(){
 window.addEventListener('hashchange', handleHash);
 
 /* Ensure categories loaded once if needed */
-async function loadCategoriesIfEmpty(){
-  if(!categoriesData || categoriesData.length === 0) await loadCategories();
+async function loadCategoriesIfEmpty() {
+  if (!categoriesData || categoriesData.length === 0) await loadCategories();
 }
 
 /* ---------- Init ---------- */
-async function init(){
+async function init() {
   // load categories for homepage and sidebar
   await loadCategories();
 
@@ -389,3 +424,4 @@ async function init(){
   handleHash();
 }
 init();
+
